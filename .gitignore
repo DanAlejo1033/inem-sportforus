@@ -1,0 +1,19 @@
+# Archivos generados por el sistema operativo
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Archivos de entorno y configuraciones de editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos temporales y respaldos generados
+*.log
+*.tmp
+*.bak
+inem_backup_*.sql
+*.csv
