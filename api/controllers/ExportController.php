@@ -139,6 +139,32 @@ class ExportController {
             $fecha     = $db->quote($m['fecha']);
             echo "INSERT INTO `movimientos` (`id`, `codigo`, `tipo`, `persona`, `documento`, `area`, `docente`, `obs`, `estado`, `fecha`) VALUES ({$id}, {$codigo}, {$tipo}, {$persona}, {$documento}, {$area}, {$docente}, {$obs}, {$estado}, {$fecha});\n";
         }
+
+        // 3. Estructura y datos de 'encargados'
+        echo "\n-- Backup de la tabla encargados\n";
+        echo "DROP TABLE IF EXISTS `encargados`;\n";
+        echo "CREATE TABLE `encargados` (\n";
+        echo "  `id` INT AUTO_INCREMENT PRIMARY KEY,\n";
+        echo "  `usuario` VARCHAR(50) NOT NULL UNIQUE,\n";
+        echo "  `correo` VARCHAR(120) NOT NULL UNIQUE,\n";
+        echo "  `nombre` VARCHAR(120) NOT NULL,\n";
+        echo "  `contrasena` VARCHAR(255) NOT NULL,\n";
+        echo "  `cargo` ENUM('Estudiante','Profesor') NOT NULL DEFAULT 'Estudiante',\n";
+        echo "  `creado_en` DATETIME DEFAULT CURRENT_TIMESTAMP\n";
+        echo ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;\n\n";
+
+        $stmtEnc = $db->query("SELECT * FROM encargados");
+        if ($stmtEnc) {
+            while ($e = $stmtEnc->fetch()) {
+                $usuario    = $db->quote($e['usuario']);
+                $correo     = $db->quote($e['correo']);
+                $nombre     = $db->quote($e['nombre']);
+                $contrasena = $db->quote($e['contrasena']);
+                $cargo      = $db->quote($e['cargo']);
+                $creado     = $db->quote($e['creado_en']);
+                echo "INSERT INTO `encargados` (`id`, `usuario`, `correo`, `nombre`, `contrasena`, `cargo`, `creado_en`) VALUES ({$e['id']}, {$usuario}, {$correo}, {$nombre}, {$contrasena}, {$cargo}, {$creado});\n";
+            }
+        }
         exit;
     }
 }

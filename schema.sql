@@ -33,6 +33,17 @@ CREATE TABLE IF NOT EXISTS movimientos (
   CONSTRAINT fk_balon FOREIGN KEY (codigo) REFERENCES balones(codigo) ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
+-- ── Tabla de encargados (usuarios y responsables) ─────────
+CREATE TABLE IF NOT EXISTS encargados (
+  id         INT          AUTO_INCREMENT PRIMARY KEY,
+  usuario    VARCHAR(50)  NOT NULL UNIQUE,
+  correo     VARCHAR(120) NOT NULL UNIQUE,
+  nombre     VARCHAR(120) NOT NULL,
+  contrasena VARCHAR(255) NOT NULL,
+  cargo      ENUM('Estudiante','Profesor') NOT NULL DEFAULT 'Estudiante',
+  creado_en  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
 -- ── Datos de demostración ───────────────────────────────
 INSERT INTO balones (codigo, tipo, estado, obs) VALUES
 ('INEM-001', 'Fútbol', 'Disponible', 'En buen estado, listo para clase'),
@@ -55,3 +66,7 @@ INSERT INTO balones (codigo, tipo, estado, obs) VALUES
 ('INEM-018', 'Voleibol', 'Disponible', 'Marca Mikasa'),
 ('INEM-019', 'Voleibol', 'Dañado', 'Pinchadura por objeto punzante'),
 ('INEM-020', 'Voleibol', 'Disponible', 'Nuevo en inventario');
+
+INSERT INTO encargados (usuario, correo, nombre, contrasena, cargo) VALUES
+('profesor.carlos', 'carlos.restrepo@inemjose.edu.co', 'Carlos Alberto Restrepo', '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeN0sB/G5Qz6I3mR1uQ4Gg3zMh1s4g2O2', 'Profesor'),
+('monitor.juan', 'juan.perez@inemjose.edu.co', 'Juan Camilo Pérez', '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeN0sB/G5Qz6I3mR1uQ4Gg3zMh1s4g2O2', 'Estudiante');
