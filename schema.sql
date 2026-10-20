@@ -68,5 +68,5 @@ INSERT INTO balones (codigo, tipo, estado, obs) VALUES
 ('INEM-020', 'Voleibol', 'Disponible', 'Nuevo en inventario');
 
 INSERT INTO encargados (usuario, correo, nombre, contrasena, cargo) VALUES
-('profesor.carlos', 'carlos.restrepo@inemjose.edu.co', 'Carlos Alberto Restrepo', '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeN0sB/G5Qz6I3mR1uQ4Gg3zMh1s4g2O2', 'Profesor'),
-('monitor.juan', 'juan.perez@inemjose.edu.co', 'Juan Camilo Pérez', '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeN0sB/G5Qz6I3mR1uQ4Gg3zMh1s4g2O2', 'Estudiante');
+('Daniel', 'daniel.oviedoisaza@inemjose.edu.co', 'Daniel Alejandro Oviedo Isaza', 'Tests123', 'Profesor'),
+('Alejandro', 'alejandro.chaconsalas@inemjose.edu.co', 'Alejandro de Jesus Chacon', 'Tests123', 'Estudiante');
