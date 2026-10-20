@@ -67,8 +67,19 @@ INSERT INTO balones (codigo, tipo, estado, obs) VALUES
 ('INEM-017', 'Voleibol', 'Préstamo', 'Selección femenina de voleibol'),
 ('INEM-018', 'Voleibol', 'Disponible', 'Marca Mikasa'),
 ('INEM-019', 'Voleibol', 'Dañado', 'Pinchadura por objeto punzante'),
-('INEM-020', 'Voleibol', 'Disponible', 'Nuevo en inventario');
+('INEM-020', 'Voleibol', 'Disponible', 'Nuevo en inventario')
+ON DUPLICATE KEY UPDATE
+  tipo = VALUES(tipo),
+  estado = VALUES(estado),
+  obs = VALUES(obs);
 
 INSERT INTO encargados (usuario, correo, nombre, contrasena, cargo, grado, seccion) VALUES
 ('Daniel', 'daniel.oviedoisaza@inemjose.edu.co', 'Daniel Alejandro Oviedo Isaza', 'Tests123', 'Profesor', NULL, NULL),
-('Alejandro', 'alejandro.chaconsalas@inemjose.edu.co', 'Alejandro de Jesus Chacon', 'Tests123', 'Estudiante', '11', '2');
+('Alejandro', 'alejandro.chaconsalas@inemjose.edu.co', 'Alejandro de Jesus Chacon', 'Tests123', 'Estudiante', '11', '2')
+ON DUPLICATE KEY UPDATE
+  correo = VALUES(correo),
+  nombre = VALUES(nombre),
+  contrasena = VALUES(contrasena),
+  cargo = VALUES(cargo),
+  grado = VALUES(grado),
+  seccion = VALUES(seccion);
