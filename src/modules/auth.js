@@ -16,7 +16,26 @@ export function getCurrentUser() {
   }
 }
 
+export function resetAllFilters() {
+  // Resetear filtros de búsqueda y selectores de Inventario
+  const qInv     = document.querySelector('#qInv');
+  const sInvTipo = document.querySelector('#sInvTipo');
+  const sInvEst  = document.querySelector('#sInvEst');
+  if (qInv) qInv.value = '';
+  if (sInvTipo) sInvTipo.value = '';
+  if (sInvEst) sInvEst.value = '';
+
+  // Resetear filtros de búsqueda y selectores de Movimientos
+  const qMov = document.querySelector('#qMov');
+  const sDep = document.querySelector('#sDep');
+  const sEst = document.querySelector('#sEst');
+  if (qMov) qMov.value = '';
+  if (sDep) sDep.value = '';
+  if (sEst) sEst.value = '';
+}
+
 export function setCurrentUser(user) {
+  resetAllFilters();
   if (user) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
   } else {
@@ -40,6 +59,7 @@ export function logout() {
   document.body.classList.remove('role-profesor', 'role-estudiante');
   const kpiGrid = document.getElementById('kpiGrid') || document.querySelector('.kpi-grid');
   if (kpiGrid) kpiGrid.classList.remove('estudiante-grid');
+  resetAllFilters();
   msg('Has cerrado sesión correctamente');
   applyRolePermissions();
 }
@@ -121,11 +141,8 @@ export function applyRolePermissions() {
     document.body.classList.add('role-estudiante');
   }
 
-  // 4. Carga inicial del inventario mostrando todos los balones y su estado
-  const sInvEst = document.getElementById('sInvEst');
-  if (sInvEst) {
-    sInvEst.value = '';
-  }
+  // 4. Limpiar todos los filtros (búsqueda, tipo, estado) para evitar mezclar consultas entre perfiles
+  resetAllFilters();
 
   // 5. Exportación de Respaldo SQL en el menú lateral: solo accesible para Profesores
   const sideNavExportSql = document.getElementById('sideNavExportSql');
@@ -156,7 +173,7 @@ export function applyRolePermissions() {
   if (window.goTab) window.goTab('inventario');
 
   // Refresca las vistas para actualizar los botones de acción en las tablas
-  if (window.renderInv) window.renderInv();
+  if (window.renderInv) window.renderInv(1);
   if (window.renderMovs) window.renderMovs();
 }
 
