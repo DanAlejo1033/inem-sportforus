@@ -37,6 +37,9 @@ export function isEstudiante() {
 
 export function logout() {
   localStorage.removeItem(STORAGE_KEY);
+  document.body.classList.remove('role-profesor', 'role-estudiante');
+  const kpiGrid = document.getElementById('kpiGrid') || document.querySelector('.kpi-grid');
+  if (kpiGrid) kpiGrid.classList.remove('estudiante-grid');
   msg('Has cerrado sesión correctamente');
   applyRolePermissions();
 }
@@ -93,10 +96,30 @@ export function applyRolePermissions() {
   const sideNavDan      = document.getElementById('sideNavDan');
   const cardKpiDanados  = document.getElementById('cardKpiDanados');
   const optInvDanado    = document.getElementById('optInvDanado');
+  const kpiGrid         = document.getElementById('kpiGrid') || document.querySelector('.kpi-grid');
+
   if (btnMarcarDanado) btnMarcarDanado.style.display = isProf ? 'inline-flex' : 'none';
   if (sideNavDan)      sideNavDan.style.display      = isProf ? 'flex' : 'none';
   if (cardKpiDanados)  cardKpiDanados.style.display  = isProf ? 'block' : 'none';
   if (optInvDanado)    optInvDanado.style.display    = isProf ? 'block' : 'none';
+
+  // Cuadrícula de KPIs centrada y equilibrada en 3 columnas para Estudiantes
+  if (kpiGrid) {
+    if (isProf) {
+      kpiGrid.classList.remove('estudiante-grid');
+    } else {
+      kpiGrid.classList.add('estudiante-grid');
+    }
+  }
+
+  // Clases en body para ajustes CSS según rol
+  if (isProf) {
+    document.body.classList.remove('role-estudiante');
+    document.body.classList.add('role-profesor');
+  } else {
+    document.body.classList.remove('role-profesor');
+    document.body.classList.add('role-estudiante');
+  }
 
   // 4. Carga inicial del inventario enfocada en 'Disponibles' SOLO para Estudiante
   const sInvEst = document.getElementById('sInvEst');
