@@ -65,7 +65,11 @@ export function applyRolePermissions() {
 
   if (userNameEl) userNameEl.textContent = user.nombre || user.usuario;
   if (userRoleEl) {
-    userRoleEl.textContent = user.cargo;
+    if (user.cargo === 'Estudiante' && user.grado) {
+      userRoleEl.textContent = user.seccion ? `Estudiante (${user.grado}-${user.seccion})` : `Estudiante (${user.grado})`;
+    } else {
+      userRoleEl.textContent = user.cargo;
+    }
     userRoleEl.className = `badge-cyber ${user.cargo === 'Profesor' ? 'badge-profesor' : 'badge-estudiante'}`;
   }
 
@@ -157,6 +161,19 @@ export function initAuth() {
     });
   }
 
+  // Alternar campos de Estudiante (Grado y Sección) según el selector de cargo
+  const regCargo = document.getElementById('regCargo');
+  const divRegEstudiante = document.getElementById('divRegEstudianteInfo');
+  if (regCargo && divRegEstudiante) {
+    regCargo.addEventListener('change', () => {
+      if (regCargo.value === 'Estudiante') {
+        divRegEstudiante.classList.remove('d-none');
+      } else {
+        divRegEstudiante.classList.add('d-none');
+      }
+    });
+  }
+
   // Procesar Login
   const btnSubmitLogin = document.getElementById('btnSubmitLogin');
   if (btnSubmitLogin) {
@@ -201,9 +218,16 @@ export function initAuth() {
       const nombre     = document.getElementById('regNombre')?.value.trim();
       const contrasena = document.getElementById('regPass')?.value.trim();
       const cargo      = document.getElementById('regCargo')?.value;
+      const grado      = document.getElementById('regGrado')?.value.trim() || null;
+      const seccion    = document.getElementById('regSeccion')?.value.trim() || null;
 
       if (!usuario || !correo || !nombre || !contrasena) {
         msg('Por favor diligencia todos los campos del registro.', 'err');
+        return;
+      }
+
+      if (cargo === 'Estudiante' && (!grado || !seccion)) {
+        msg('Para registrarte como estudiante debes indicar el grado y la sección.', 'err');
         return;
       }
 
@@ -211,7 +235,7 @@ export function initAuth() {
       btnSubmitReg.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Registrando…';
 
       try {
-        const r = await ApiService.register({ usuario, correo, nombre, contrasena, cargo });
+        const r = await ApiService.register({ usuario, correo, nombre, contrasena, cargo, grado, seccion });
         if (!r.ok) {
           msg(r.error, 'err');
           return;

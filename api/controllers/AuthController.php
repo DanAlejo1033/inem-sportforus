@@ -18,7 +18,7 @@ class AuthController {
         }
 
         $stmt = $db->prepare("
-            SELECT id, usuario, correo, nombre, contrasena, cargo, creado_en 
+            SELECT id, usuario, correo, nombre, contrasena, cargo, grado, seccion, creado_en 
             FROM encargados 
             WHERE usuario = ? OR correo = ? 
             LIMIT 1
@@ -58,6 +58,8 @@ class AuthController {
         $nombre     = trim($b['nombre'] ?? '');
         $contrasena = trim($b['contrasena'] ?? '');
         $cargo      = trim($b['cargo'] ?? 'Estudiante');
+        $grado      = isset($b['grado']) && trim($b['grado']) !== '' ? trim($b['grado']) : null;
+        $seccion    = isset($b['seccion']) && trim($b['seccion']) !== '' ? trim($b['seccion']) : null;
 
         if (!$usuario) err('El nombre de usuario es obligatorio.', 400);
         if (!$correo || !filter_var($correo, FILTER_VALIDATE_EMAIL)) err('Ingresa un correo institucional válido.', 400);
@@ -66,6 +68,17 @@ class AuthController {
 
         if (!in_array($cargo, ['Estudiante', 'Profesor'])) {
             err('El cargo debe ser Estudiante o Profesor.', 400);
+        }
+
+        // Si es profesor, grado y sección deben ser nulos
+        if ($cargo === 'Profesor') {
+            $grado = null;
+            $seccion = null;
+        }
+
+        // Si es estudiante, requerir grado y sección
+        if ($cargo === 'Estudiante' && (!$grado || !$seccion)) {
+            err('Para registrar un estudiante debes indicar el grado y la sección / grupo.', 400);
         }
 
         // Verifica si el usuario o correo ya existen
@@ -78,10 +91,10 @@ class AuthController {
         $hash = password_hash($contrasena, PASSWORD_BCRYPT);
 
         $stmt = $db->prepare("
-            INSERT INTO encargados (usuario, correo, nombre, contrasena, cargo, creado_en)
-            VALUES (?, ?, ?, ?, ?, NOW())
+            INSERT INTO encargados (usuario, correo, nombre, contrasena, cargo, grado, seccion, creado_en)
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
         ");
-        $stmt->execute([$usuario, $correo, $nombre, $hash, $cargo]);
+        $stmt->execute([$usuario, $correo, $nombre, $hash, $cargo, $grado, $seccion]);
         $newId = $db->lastInsertId();
 
         ok([
@@ -89,7 +102,9 @@ class AuthController {
             'usuario' => $usuario,
             'correo'  => $correo,
             'nombre'  => $nombre,
-            'cargo'   => $cargo
+            'cargo'   => $cargo,
+            'grado'   => $grado,
+            'seccion' => $seccion
         ]);
     }
 
@@ -97,7 +112,7 @@ class AuthController {
      * Lista los encargados registrados (para selectores de docentes/estudiantes).
      */
     public static function index(PDO $db): void {
-        $stmt = $db->query("SELECT id, usuario, correo, nombre, cargo, creado_en FROM encargados ORDER BY nombre ASC");
+        $stmt = $db->query("SELECT id, usuario, correo, nombre, cargo, grado, seccion, creado_en FROM encargados ORDER BY nombre ASC");
         ok($stmt->fetchAll());
     }
 }

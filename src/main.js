@@ -58,14 +58,23 @@ function setupEventListeners() {
     });
   }
 
-  // Modal Préstamo: autocompletar docente si el usuario activo es Profesor
+  // Modal Préstamo: autocompletar campos según el usuario activo
   const mPre = document.getElementById('mPre');
   if (mPre) {
     mPre.addEventListener('show.bs.modal', () => {
       const user = getCurrentUser();
+      if (!user) return;
       const pDoc2 = document.querySelector('#pDoc2');
-      if (user && user.cargo === 'Profesor' && pDoc2 && !pDoc2.value) {
-        pDoc2.value = user.nombre;
+      const pPer  = document.querySelector('#pPer');
+      const pArea = document.querySelector('#pArea');
+
+      if (user.cargo === 'Profesor') {
+        if (pDoc2 && !pDoc2.value) pDoc2.value = user.nombre;
+      } else if (user.cargo === 'Estudiante') {
+        if (pPer && !pPer.value) pPer.value = user.nombre;
+        if (pArea && !pArea.value && user.grado) {
+          pArea.value = user.seccion ? `${user.grado}-${user.seccion}` : `Grado ${user.grado}`;
+        }
       }
     });
   }

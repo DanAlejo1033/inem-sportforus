@@ -41,6 +41,8 @@ CREATE TABLE IF NOT EXISTS encargados (
   nombre     VARCHAR(120) NOT NULL,
   contrasena VARCHAR(255) NOT NULL,
   cargo      ENUM('Estudiante','Profesor') NOT NULL DEFAULT 'Estudiante',
+  grado      VARCHAR(20)  DEFAULT NULL,
+  seccion    VARCHAR(20)  DEFAULT NULL,
   creado_en  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
@@ -67,6 +69,6 @@ INSERT INTO balones (codigo, tipo, estado, obs) VALUES
 ('INEM-019', 'Voleibol', 'Dañado', 'Pinchadura por objeto punzante'),
 ('INEM-020', 'Voleibol', 'Disponible', 'Nuevo en inventario');
 
-INSERT INTO encargados (usuario, correo, nombre, contrasena, cargo) VALUES
-('Daniel', 'daniel.oviedoisaza@inemjose.edu.co', 'Daniel Alejandro Oviedo Isaza', 'Tests123', 'Profesor'),
-('Alejandro', 'alejandro.chaconsalas@inemjose.edu.co', 'Alejandro de Jesus Chacon', 'Tests123', 'Estudiante');
+INSERT INTO encargados (usuario, correo, nombre, contrasena, cargo, grado, seccion) VALUES
+('Daniel', 'daniel.oviedoisaza@inemjose.edu.co', 'Daniel Alejandro Oviedo Isaza', 'Tests123', 'Profesor', NULL, NULL),
+('Alejandro', 'alejandro.chaconsalas@inemjose.edu.co', 'Alejandro de Jesus Chacon', 'Tests123', 'Estudiante', '11', '2');

@@ -150,6 +150,8 @@ class ExportController {
         echo "  `nombre` VARCHAR(120) NOT NULL,\n";
         echo "  `contrasena` VARCHAR(255) NOT NULL,\n";
         echo "  `cargo` ENUM('Estudiante','Profesor') NOT NULL DEFAULT 'Estudiante',\n";
+        echo "  `grado` VARCHAR(20) DEFAULT NULL,\n";
+        echo "  `seccion` VARCHAR(20) DEFAULT NULL,\n";
         echo "  `creado_en` DATETIME DEFAULT CURRENT_TIMESTAMP\n";
         echo ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;\n\n";
 
@@ -161,8 +163,10 @@ class ExportController {
                 $nombre     = $db->quote($e['nombre']);
                 $contrasena = $db->quote($e['contrasena']);
                 $cargo      = $db->quote($e['cargo']);
+                $grado      = $e['grado'] !== null ? $db->quote($e['grado']) : 'NULL';
+                $seccion    = $e['seccion'] !== null ? $db->quote($e['seccion']) : 'NULL';
                 $creado     = $db->quote($e['creado_en']);
-                echo "INSERT INTO `encargados` (`id`, `usuario`, `correo`, `nombre`, `contrasena`, `cargo`, `creado_en`) VALUES ({$e['id']}, {$usuario}, {$correo}, {$nombre}, {$contrasena}, {$cargo}, {$creado});\n";
+                echo "INSERT INTO `encargados` (`id`, `usuario`, `correo`, `nombre`, `contrasena`, `cargo`, `grado`, `seccion`, `creado_en`) VALUES ({$e['id']}, {$usuario}, {$correo}, {$nombre}, {$contrasena}, {$cargo}, {$grado}, {$seccion}, {$creado});\n";
             }
         }
         exit;
