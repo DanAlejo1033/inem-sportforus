@@ -38,6 +38,7 @@ export async function loadAll() {
 export async function init() {
   try {
     await loadAll();
+    goTab('inventario');
   } catch (err) {
     msg('Error al conectar con la base de datos', 'err');
     console.error('Error inicializando sistema:', err);

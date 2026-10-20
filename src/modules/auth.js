@@ -121,14 +121,10 @@ export function applyRolePermissions() {
     document.body.classList.add('role-estudiante');
   }
 
-  // 4. Carga inicial del inventario enfocada en 'Disponibles' SOLO para Estudiante
+  // 4. Carga inicial del inventario mostrando todos los balones y su estado
   const sInvEst = document.getElementById('sInvEst');
   if (sInvEst) {
-    if (!isProf) {
-      sInvEst.value = 'Disponible';
-    } else {
-      sInvEst.value = '';
-    }
+    sInvEst.value = '';
   }
 
   // 5. Exportación de Respaldo SQL en el menú lateral: solo accesible para Profesores
@@ -143,7 +139,7 @@ export function applyRolePermissions() {
         <div class="alert-cyber info mb-3">
           <i class="bi bi-shield-check me-2 fs-5 text-info"></i>
           <div>
-            <strong>Modo Monitor (Estudiante):</strong> Tu vista inicial está enfocada en balones <strong>Disponibles</strong> listos para clase. Por seguridad institucional y control de pérdidas, las <strong>Devoluciones</strong>, altas y bajas son responsabilidad exclusiva de los <strong>Profesores</strong>.
+            <strong>Modo Monitor (Estudiante):</strong> Mostrando el inventario de balones <strong>activos en servicio</strong> (el material averiado o en baja técnica es gestionado exclusivamente por los profesores). Por seguridad y control de pérdidas, las <strong>Devoluciones</strong> son recibidas y verificadas por los docentes.
           </div>
         </div>`;
       roleNoticeEl.classList.remove('d-none');
@@ -152,6 +148,12 @@ export function applyRolePermissions() {
       roleNoticeEl.classList.add('d-none');
     }
   }
+
+  // 7. Actualizar métricas KPI según el rol activo
+  if (window.refreshKpiDisplay) window.refreshKpiDisplay();
+
+  // 8. Garantizar apertura inicial en la pestaña de Inventario
+  if (window.goTab) window.goTab('inventario');
 
   // Refresca las vistas para actualizar los botones de acción en las tablas
   if (window.renderInv) window.renderInv();

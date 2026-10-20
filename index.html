@@ -136,10 +136,10 @@
   <div class="sec-title mb-3"><i class="bi bi-activity"></i> Resumen del inventario</div>
   <div class="kpi-grid mb-4" id="kpiGrid">
     <a class="glass kpi-card accent-top" href="#" onclick="goTab('inventario');filterInv('');return false">
-      <div class="kpi-label">Total Balones</div>
+      <div class="kpi-label" id="kpiTotalLabel">Total Balones</div>
       <div class="kpi-value cyan" id="kpiTotal">0</div>
-      <div class="kpi-sub"><i class="bi bi-collection"></i> Inventario registrado</div>
-      <div class="kpi-hint"><i class="bi bi-arrow-right-circle"></i> Ver inventario completo</div>
+      <div class="kpi-sub" id="kpiTotalSub"><i class="bi bi-collection"></i> Inventario registrado</div>
+      <div class="kpi-hint" id="kpiTotalHint"><i class="bi bi-arrow-right-circle"></i> Ver inventario completo</div>
       <i class="bi bi-collection kpi-icon-bg"></i>
     </a>
     <a class="glass kpi-card accent-top" href="#" onclick="goTab('inventario');filterInv('Disponible');return false">
@@ -171,11 +171,11 @@
   <!-- Tabs + acciones -->
   <div class="glass mb-4" style="border-top: 2px solid var(--cyan-dim);">
     <div class="tab-nav">
-      <button class="tab-btn active" onclick="goTab('movimientos')" id="tab-movimientos">
-        <i class="bi bi-table me-1"></i>Movimientos
-      </button>
-      <button class="tab-btn" onclick="goTab('inventario')" id="tab-inventario">
+      <button class="tab-btn active" onclick="goTab('inventario')" id="tab-inventario">
         <i class="bi bi-boxes me-1"></i>Inventario
+      </button>
+      <button class="tab-btn" onclick="goTab('movimientos')" id="tab-movimientos">
+        <i class="bi bi-table me-1"></i>Movimientos
       </button>
       <div class="action-pills">
         <button class="btn-cyber success" id="btnNuevoBal" data-bs-toggle="modal" data-bs-target="#mBal"><i class="bi bi-plus-circle"></i> Nuevo Balón</button>
@@ -185,46 +185,8 @@
       </div>
     </div>
 
-    <!-- TAB: MOVIMIENTOS -->
-    <div class="tab-pane active" id="pane-movimientos">
-      <div class="filter-bar" style="padding-top:.5rem">
-        <div class="form-group">
-          <label>Buscar</label>
-          <div class="search-wrap"><i class="bi bi-search"></i>
-            <input id="qMov" class="cyber-input" placeholder="Código, nombre, docente…">
-          </div>
-        </div>
-        <div class="form-group"><label>Deporte</label>
-          <select id="sDep" class="cyber-select">
-            <option value="">Todos</option>
-            <option>Fútbol</option><option>Baloncesto</option>
-            <option>Voleibol</option><option>Fútbol Sala</option>
-            <option>Microfútbol</option>
-          </select>
-        </div>
-        <div class="form-group"><label>Estado</label>
-          <select id="sEst" class="cyber-select">
-            <option value="">Todos</option>
-            <option>Disponible</option><option>Préstamo</option>
-            <option>Dañado</option><option>Devuelto</option>
-          </select>
-        </div>
-      </div>
-      <div class="data-table-wrap">
-        <table class="cyber-table">
-          <thead><tr>
-            <th>#</th><th>Código</th><th>Deporte</th>
-            <th>Persona / Resp.</th><th>Documento</th>
-            <th>Área</th><th>Docente</th>
-            <th>Fecha</th><th>Estado</th><th>Acciones</th>
-          </tr></thead>
-          <tbody id="tbMov"><tr><td colspan="10"><div class="empty-state"><i class="bi bi-hourglass-split"></i><p>Cargando…</p></div></td></tr></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- TAB: INVENTARIO -->
-    <div class="tab-pane" id="pane-inventario">
+    <!-- TAB: INVENTARIO (Carga inicial por defecto) -->
+    <div class="tab-pane active" id="pane-inventario">
       <div class="filter-bar" style="padding-top:.5rem">
         <div class="form-group">
           <label>Buscar</label>
@@ -265,6 +227,44 @@
       <div class="d-flex justify-content-between align-items-center mt-3 pt-2" style="border-top:1px solid var(--border)">
         <span id="invInfo" style="font-size:.78rem; color:var(--text-muted)"></span>
         <div id="invPag" class="d-flex gap-1"></div>
+      </div>
+    </div>
+
+    <!-- TAB: MOVIMIENTOS -->
+    <div class="tab-pane" id="pane-movimientos">
+      <div class="filter-bar" style="padding-top:.5rem">
+        <div class="form-group">
+          <label>Buscar</label>
+          <div class="search-wrap"><i class="bi bi-search"></i>
+            <input id="qMov" class="cyber-input" placeholder="Código, nombre, docente…">
+          </div>
+        </div>
+        <div class="form-group"><label>Deporte</label>
+          <select id="sDep" class="cyber-select">
+            <option value="">Todos</option>
+            <option>Fútbol</option><option>Baloncesto</option>
+            <option>Voleibol</option><option>Fútbol Sala</option>
+            <option>Microfútbol</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Estado</label>
+          <select id="sEst" class="cyber-select">
+            <option value="">Todos</option>
+            <option>Disponible</option><option>Préstamo</option>
+            <option>Dañado</option><option>Devuelto</option>
+          </select>
+        </div>
+      </div>
+      <div class="data-table-wrap">
+        <table class="cyber-table">
+          <thead><tr>
+            <th>#</th><th>Código</th><th>Deporte</th>
+            <th>Persona / Resp.</th><th>Documento</th>
+            <th>Área</th><th>Docente</th>
+            <th>Fecha</th><th>Estado</th><th>Acciones</th>
+          </tr></thead>
+          <tbody id="tbMov"><tr><td colspan="10"><div class="empty-state"><i class="bi bi-hourglass-split"></i><p>Cargando…</p></div></td></tr></tbody>
+        </table>
       </div>
     </div>
   </div>
