@@ -21,6 +21,7 @@ require_once __DIR__ . '/api/controllers/KpiController.php';
 require_once __DIR__ . '/api/controllers/BalonesController.php';
 require_once __DIR__ . '/api/controllers/MovimientosController.php';
 require_once __DIR__ . '/api/controllers/ExportController.php';
+require_once __DIR__ . '/api/controllers/AuthController.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 $action = trim($_GET['action'] ?? '');
@@ -31,6 +32,19 @@ try {
 
     // ── Enrutamiento por Acción ───────────────────────────
     switch ($action) {
+        // Autenticación y Encargados
+        case 'login':
+            if ($method === 'POST') AuthController::login($db);
+            break;
+
+        case 'register':
+            if ($method === 'POST') AuthController::register($db);
+            break;
+
+        case 'encargados':
+            if ($method === 'GET') AuthController::index($db);
+            break;
+
         // Métricas
         case 'kpis':
             if ($method === 'GET') KpiController::index($db);

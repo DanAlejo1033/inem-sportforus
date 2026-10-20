@@ -16,6 +16,83 @@
   <div class="loader-text">CONECTANDO BD…</div>
 </div>
 
+<!-- ══ PANTALLA INICIAL: INICIO DE SESIÓN Y REGISTRO DE ENCARGADOS ══ -->
+<div id="authOverlay" class="auth-overlay">
+  <div class="auth-card">
+    <div class="auth-card-header">
+      <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+        <img src="logo.png" alt="INEM" style="height:44px">
+        <div class="text-start">
+          <div style="font-family:var(--font-display);font-size:.9rem;font-weight:800;color:var(--cyan);letter-spacing:1px">SPORTFORUS · INEM</div>
+          <div style="font-size:.65rem;color:var(--text-muted)">ACCESO DE ENCARGADOS Y DOCENTES</div>
+        </div>
+      </div>
+      <div class="auth-tabs mt-3">
+        <button id="authTabLogin" class="auth-tab-btn active"><i class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión</button>
+        <button id="authTabRegister" class="auth-tab-btn"><i class="bi bi-person-plus me-1"></i> Registrarse</button>
+      </div>
+    </div>
+    
+    <div class="auth-card-body">
+      <!-- FORMULARIO DE INICIO DE SESIÓN -->
+      <form id="formLogin" onsubmit="return false;">
+        <div class="mb-3">
+          <label class="form-label" style="font-size:.72rem;color:var(--text-muted)">Usuario o Correo Institucional</label>
+          <input type="text" id="loginUser" class="cyber-input w-100" placeholder="Ej: Daniel o daniel.oviedoisaza@..." required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" style="font-size:.72rem;color:var(--text-muted)">Contraseña</label>
+          <input type="password" id="loginPass" class="cyber-input w-100" placeholder="••••••••" required>
+        </div>
+        <button id="btnSubmitLogin" class="btn-cyber primary w-100 py-2 d-flex align-items-center justify-content-center" style="font-size:.85rem">
+          <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
+        </button>
+
+        <!-- Accesos rápidos de prueba (Demo) -->
+        <div class="mt-3 pt-3" style="border-top:1px solid var(--border);font-size:.7rem;color:var(--text-muted)">
+          <div class="mb-1"><strong>Cuentas demo (clic para cargar):</strong></div>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="demo-pill" id="pillDemoProfesor"><i class="bi bi-mortarboard-fill me-1"></i> Daniel (Profesor)</span>
+            <span class="demo-pill" id="pillDemoEstudiante"><i class="bi bi-person-fill me-1"></i> Alejandro (Estudiante)</span>
+          </div>
+        </div>
+      </form>
+
+      <!-- FORMULARIO DE REGISTRO DE NUEVO ENCARGADO -->
+      <form id="formRegister" class="d-none" onsubmit="return false;">
+        <div class="row g-2 mb-2">
+          <div class="col-6">
+            <label class="form-label" style="font-size:.7rem;color:var(--text-muted)">Usuario</label>
+            <input type="text" id="regUser" class="cyber-input w-100" placeholder="Ej: maria.gomez" required>
+          </div>
+          <div class="col-6">
+            <label class="form-label" style="font-size:.7rem;color:var(--text-muted)">Cargo / Rol</label>
+            <select id="regCargo" class="cyber-select w-100" style="padding:.42rem .5rem">
+              <option value="Estudiante">Estudiante / Monitor</option>
+              <option value="Profesor">Profesor / Docente</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-2">
+          <label class="form-label" style="font-size:.7rem;color:var(--text-muted)">Nombre Completo</label>
+          <input type="text" id="regNombre" class="cyber-input w-100" placeholder="Ej: María Camila Gómez" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label" style="font-size:.7rem;color:var(--text-muted)">Correo Institucional</label>
+          <input type="email" id="regEmail" class="cyber-input w-100" placeholder="usuario@inemjose.edu.co" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" style="font-size:.7rem;color:var(--text-muted)">Contraseña</label>
+          <input type="password" id="regPass" class="cyber-input w-100" placeholder="Crea una contraseña" required>
+        </div>
+        <button id="btnSubmitRegister" class="btn-cyber success w-100 py-2 d-flex align-items-center justify-content-center" style="font-size:.85rem">
+          <i class="bi bi-person-check-fill me-1"></i> Completar Registro
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
 
 <!-- ══ TOP BAR ══ -->
@@ -28,6 +105,15 @@
     </div>
   </div>
   <div class="top-actions">
+    <!-- Usuario autenticado -->
+    <div id="userDisplay" class="user-badge-nav d-none">
+      <i class="bi bi-person-circle fs-6 text-info"></i>
+      <div class="d-flex flex-column align-items-start lh-1">
+        <span id="userName" style="font-weight:600;font-size:.78rem">Usuario</span>
+        <span id="userRoleBadge" class="badge-cyber badge-estudiante" style="font-size:.5rem;padding:.1rem .35rem;margin-top:.15rem">Estudiante</span>
+      </div>
+      <button id="btnLogout" class="btn-cyber danger" style="padding:.2rem .45rem;font-size:.7rem" title="Cerrar Sesión"><i class="bi bi-box-arrow-right"></i></button>
+    </div>
     <a href="api.php?action=export_csv" class="btn-cyber" target="_blank"><i class="bi bi-download"></i> CSV</a>
     <button class="btn-cyber" data-bs-toggle="offcanvas" data-bs-target="#sideMenu"><i class="bi bi-list fs-5"></i></button>
   </div>
@@ -68,6 +154,9 @@
     </a>
   </div>
 
+  <!-- Banner de rol / permisos -->
+  <div id="roleNoticeBanner" class="d-none"></div>
+
   <!-- Tabs + acciones -->
   <div class="glass mb-4" style="border-top: 2px solid var(--cyan-dim);">
     <div class="tab-nav">
@@ -78,7 +167,7 @@
         <i class="bi bi-boxes me-1"></i>Inventario
       </button>
       <div class="action-pills">
-        <button class="btn-cyber success" data-bs-toggle="modal" data-bs-target="#mBal"><i class="bi bi-plus-circle"></i> Nuevo Balón</button>
+        <button class="btn-cyber success" id="btnNuevoBal" data-bs-toggle="modal" data-bs-target="#mBal"><i class="bi bi-plus-circle"></i> Nuevo Balón</button>
         <button class="btn-cyber primary" data-bs-toggle="modal" data-bs-target="#mPre"><i class="bi bi-arrow-right-circle"></i> Prestar</button>
         <button class="btn-cyber warning" data-bs-toggle="modal" data-bs-target="#mDev"><i class="bi bi-arrow-return-left"></i> Devolver</button>
         <button class="btn-cyber danger"  data-bs-toggle="modal" data-bs-target="#mDan"><i class="bi bi-exclamation-octagon"></i> Dañado</button>
@@ -181,14 +270,14 @@
     <button class="btn-close-cyber" data-bs-dismiss="offcanvas"><i class="bi bi-x-lg"></i></button>
   </div>
   <div class="offcanvas-body d-flex flex-column gap-1">
-    <button class="side-nav-link" data-bs-toggle="modal" data-bs-target="#mBal" data-bs-dismiss="offcanvas"><i class="bi bi-plus-square-fill"></i>Registrar nuevo balón</button>
+    <button id="sideNavNuevoBal" class="side-nav-link" data-bs-toggle="modal" data-bs-target="#mBal" data-bs-dismiss="offcanvas"><i class="bi bi-plus-square-fill"></i>Registrar nuevo balón</button>
     <button class="side-nav-link" data-bs-toggle="modal" data-bs-target="#mPre" data-bs-dismiss="offcanvas"><i class="bi bi-arrow-right-circle-fill"></i>Nuevo préstamo</button>
     <button class="side-nav-link" data-bs-toggle="modal" data-bs-target="#mDev" data-bs-dismiss="offcanvas"><i class="bi bi-arrow-return-left"></i>Registrar devolución</button>
     <button class="side-nav-link" data-bs-toggle="modal" data-bs-target="#mDan" data-bs-dismiss="offcanvas"><i class="bi bi-exclamation-octagon-fill"></i>Marcar balón dañado</button>
     <hr style="border-color:var(--border)">
     <a class="side-nav-link" href="api.php?action=export_csv" target="_blank"><i class="bi bi-file-earmark-spreadsheet"></i>Exportar Movimientos (CSV)</a>
     <a class="side-nav-link" href="api.php?action=export_csv&tabla=inventario" target="_blank"><i class="bi bi-file-earmark-text"></i>Exportar Inventario (CSV)</a>
-    <a class="side-nav-link" href="api.php?action=export_sql" target="_blank"><i class="bi bi-database-down"></i>Exportar Respaldo (SQL)</a>
+    <a id="sideNavExportSql" class="side-nav-link" href="api.php?action=export_sql" target="_blank"><i class="bi bi-database-down"></i>Exportar Respaldo (SQL)</a>
     <div style="margin-top:auto;padding:.9rem;background:rgba(20,60,120,0.1);border:1px solid var(--border);border-radius:8px;font-size:.7rem;color:var(--text-muted)">
       <div style="font-family:var(--font-display);color:var(--cyan);font-size:.58rem;letter-spacing:2px;margin-bottom:.35rem">BASE DE DATOS</div>
       Conectado a <strong style="color:var(--text)">MySQL</strong> vía PHP/PDO.

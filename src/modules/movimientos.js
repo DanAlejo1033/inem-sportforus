@@ -5,6 +5,7 @@
 import { ApiService } from '../services/apiService.js';
 import { badge, matchQuery } from '../ui/uiHelpers.js';
 import { msg } from '../ui/toast.js';
+import { isProfesor } from './auth.js';
 
 let allMovs = [];
 
@@ -50,7 +51,7 @@ export function renderMovs() {
       <td>
         <div style="display:flex;gap:.4rem">
           ${m.estado === 'Préstamo' ? `<button class="btn-cyber warning" style="padding:.22rem .55rem;font-size:.72rem" onclick="window.quickDev('${m.codigo}')" title="Devolver balón"><i class="bi bi-arrow-return-left"></i></button>` : ''}
-          <button class="btn-cyber danger" style="padding:.22rem .55rem;font-size:.72rem" onclick="window.delMov('${m.id}')" title="Eliminar registro"><i class="bi bi-trash"></i></button>
+          ${isProfesor() ? `<button class="btn-cyber danger" style="padding:.22rem .55rem;font-size:.72rem" onclick="window.delMov('${m.id}')" title="Eliminar registro"><i class="bi bi-trash"></i></button>` : ''}
         </div>
       </td>
     </tr>`).join('');
@@ -64,6 +65,10 @@ export function quickDev(codigo) {
 }
 
 export async function delMov(id) {
+  if (!isProfesor()) {
+    msg('Acción restringida: Solo los profesores pueden eliminar registros del historial.', 'err');
+    return;
+  }
   if (!confirm('¿Eliminar este registro?')) return;
   const r = await ApiService.eliminarMovimiento(id);
   if (!r.ok) {

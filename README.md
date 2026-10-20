@@ -62,6 +62,7 @@ balones/
 │   │   ├── toast.js             // Notificaciones flotantes CyberToast y helpers de modales
 │   │   └── uiHelpers.js         // Generador de badges de estado y motor de búsqueda
 │   └── modules/
+│       ├── auth.js              // Control de sesión y permisos delimitados por cargo (Profesor / Estudiante)
 │       ├── kpis.js              // Consulta y renderizado dinámico de tarjetas de métricas
 │       ├── inventario.js        // Catálogo de balones, paginación, correlativo INEM-XXX y bajas
 │       └── movimientos.js       // Historial de préstamos, devoluciones rápidas y filtros
@@ -72,6 +73,7 @@ balones/
     ├── helpers/
     │   └── response.php         // Helpers JSON de respuesta HTTP ok(), err(), body() y CORS
     └── controllers/
+        ├── AuthController.php        // Autenticación, registro y gestión de encargados
         ├── KpiController.php         // Métricas del dashboard
         ├── BalonesController.php     // CRUD y consultas de balones
         ├── MovimientosController.php // Gestión de préstamos, devoluciones y daños
@@ -80,10 +82,31 @@ balones/
 
 ---
 
+## 🔐 Control de Acceso y Delimitación de Cargos (RBAC)
+
+El sistema cuenta con una pantalla inicial de acceso (Login y Registro) con permisos delimitados según el cargo:
+
+| Funcionalidad / Permiso | Profesor / Docente | Estudiante / Monitor |
+| :--- | :---: | :---: |
+| **Iniciar Sesión y Registrarse** | ✅ Sí | ✅ Sí |
+| **Consultar Inventario y Movimientos** | ✅ Sí | ✅ Sí |
+| **Registrar Préstamos y Devoluciones** | ✅ Sí | ✅ Sí |
+| **Reportar Balón Dañado** | ✅ Sí | ✅ Sí |
+| **Registrar Nuevos Balones en Inventario** | ✅ Sí | ❌ No (Exclusivo Docente) |
+| **Eliminar Balones Dañados (Baja definitiva)** | ✅ Sí | ❌ No (Exclusivo Docente) |
+| **Eliminar Registros del Historial** | ✅ Sí | ❌ No (Exclusivo Docente) |
+| **Exportar Respaldo de Base de Datos (SQL)** | ✅ Sí | ❌ No (Exclusivo Docente) |
+| **Exportar Reportes a Excel (CSV)** | ✅ Sí | ✅ Sí |
+
+---
+
 ## 📊 Endpoints de la API REST (`api.php`)
 
 | Acción (`?action=`) | Método | Controlador | Descripción |
 | :--- | :---: | :--- | :--- |
+| `login` | `POST` | `AuthController::login` | Autentica usuario/correo y contraseña (BCRYPT / seguro). |
+| `register` | `POST` | `AuthController::register` | Registra un nuevo encargado (`Estudiante` o `Profesor`). |
+| `encargados` | `GET` | `AuthController::index` | Lista los encargados y docentes registrados. |
 | `kpis` | `GET` | `KpiController::index` | Obtiene contadores totales, disponibles, en préstamo y dañados. |
 | `inventario` | `GET` | `BalonesController::index` | Lista todos los balones registrados. |
 | `disponibles` | `GET` | `BalonesController::disponibles` | Lista balones aptos para nuevo préstamo. |

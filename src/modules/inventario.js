@@ -6,6 +6,7 @@ import { ApiService } from '../services/apiService.js';
 import { PAGINATION, ESTADOS } from '../config/constants.js';
 import { badge, matchQuery } from '../ui/uiHelpers.js';
 import { msg } from '../ui/toast.js';
+import { isProfesor } from './auth.js';
 
 let allInv = [];
 let invCurrentPage = 1;
@@ -77,8 +78,8 @@ export function renderInv(page = 1) {
       <td style="color:var(--text-muted);font-size:.78rem">${b.obs || '—'}</td>
       <td style="color:var(--text-muted);font-size:.75rem">${new Date(b.creado_en).toLocaleDateString('es-CO')}</td>
       <td>
-        ${b.estado === ESTADOS.DANADO 
-          ? `<button class="btn-cyber danger" style="padding:.22rem .55rem;font-size:.72rem" onclick="window.delBal('${b.id}','${b.codigo}','${b.estado}')" title="Eliminar balón"><i class="bi bi-trash"></i></button>`
+        ${b.estado === ESTADOS.DANADO && isProfesor()
+          ? `<button class="btn-cyber danger" style="padding:.22rem .55rem;font-size:.72rem" onclick="window.delBal('${b.id}','${b.codigo}','${b.estado}')" title="Eliminar balón definitivamente"><i class="bi bi-trash"></i></button>`
           : ''}
       </td>
     </tr>`).join('');
@@ -137,6 +138,10 @@ export function fillSelects() {
 }
 
 export async function delBal(id, codigo, estado, onReload) {
+  if (!isProfesor()) {
+    msg('Acción restringida: Solo los profesores pueden dar de baja balones del inventario.', 'err');
+    return;
+  }
   if (estado !== ESTADOS.DANADO) { 
     msg('Solo se pueden eliminar balones que estén marcados como Dañados.', 'err'); 
     return; 

@@ -9,6 +9,7 @@ import { msg, closeM } from './ui/toast.js';
 import { loadKPIs } from './modules/kpis.js';
 import { loadMovs, renderMovs, quickDev, delMov } from './modules/movimientos.js';
 import { loadInv, renderInv, nextCodigoInem, delBal } from './modules/inventario.js';
+import { initAuth, isProfesor, logout, getCurrentUser } from './modules/auth.js';
 
 /* ── Pestañas (Tabs) ── */
 export function goTab(name) {
@@ -57,10 +58,26 @@ function setupEventListeners() {
     });
   }
 
+  // Modal Préstamo: autocompletar docente si el usuario activo es Profesor
+  const mPre = document.getElementById('mPre');
+  if (mPre) {
+    mPre.addEventListener('show.bs.modal', () => {
+      const user = getCurrentUser();
+      const pDoc2 = document.querySelector('#pDoc2');
+      if (user && user.cargo === 'Profesor' && pDoc2 && !pDoc2.value) {
+        pDoc2.value = user.nombre;
+      }
+    });
+  }
+
   // Guardar Nuevo Balón
   const btnBal = document.querySelector('#btnBal');
   if (btnBal) {
     btnBal.addEventListener('click', async () => {
+      if (!isProfesor()) {
+        msg('Acción restringida: Solo los profesores pueden registrar nuevos balones en el inventario.', 'err');
+        return;
+      }
       const bCod = document.querySelector('#bCod');
       const bTipo = document.querySelector('#bTipo');
       const bEst = document.querySelector('#bEst');
@@ -177,6 +194,9 @@ function setupEventListeners() {
   document.querySelector('#qInv')?.addEventListener('input', () => renderInv(1));
   document.querySelector('#sInvEst')?.addEventListener('change', () => renderInv(1));
   document.querySelector('#sInvTipo')?.addEventListener('change', () => renderInv(1));
+
+  // Inicializar Autenticación y permisos
+  initAuth();
 }
 
 /* ── Exponer helpers en window para preservar enlaces inline del HTML ── */
@@ -186,6 +206,7 @@ window.quickDev = quickDev;
 window.delMov = delMov;
 window.delBal = (id, codigo, estado) => delBal(id, codigo, estado, loadAll);
 window.renderInv = renderInv;
+window.logout = logout;
 
 // Arrancar sistema
 if (document.readyState === 'loading') {

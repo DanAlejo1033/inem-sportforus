@@ -27,5 +27,8 @@ export const ApiService = {
   registrarDevolucion: (data) => apiFetch('devolucion', 'POST', data),
   marcarDanado: (data) => apiFetch('danado', 'POST', data),
   eliminarBalon: (id) => apiFetch(`del_balon&id=${encodeURIComponent(id)}`, 'DELETE'),
-  eliminarMovimiento: (id) => apiFetch(`del_mov&id=${encodeURIComponent(id)}`, 'DELETE')
+  eliminarMovimiento: (id) => apiFetch(`del_mov&id=${encodeURIComponent(id)}`, 'DELETE'),
+  login: (data) => apiFetch('login', 'POST', data),
+  register: (data) => apiFetch('register', 'POST', data),
+  getEncargados: () => apiFetch('encargados')
 };
