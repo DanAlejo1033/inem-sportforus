@@ -303,25 +303,6 @@ export function initAuth() {
     });
   }
 
-  // Píldoras de credenciales de prueba rápida (Demo)
-  const pillProf = document.getElementById('pillDemoProfesor');
-  if (pillProf) {
-    pillProf.addEventListener('click', () => {
-      document.getElementById('loginUser').value = 'Daniel';
-      document.getElementById('loginPass').value = 'Tests123';
-      msg('Credenciales de Profesor (Daniel) cargadas', 'ok');
-    });
-  }
-
-  const pillEst = document.getElementById('pillDemoEstudiante');
-  if (pillEst) {
-    pillEst.addEventListener('click', () => {
-      document.getElementById('loginUser').value = 'Alejandro';
-      document.getElementById('loginPass').value = 'Tests123';
-      msg('Credenciales de Estudiante (Alejandro) cargadas', 'ok');
-    });
-  }
-
   // Aplicar permisos iniciales según el estado en almacenamiento
   applyRolePermissions();
 }
