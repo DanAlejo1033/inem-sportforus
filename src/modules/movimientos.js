@@ -50,7 +50,7 @@ export function renderMovs() {
       <td>${badge(m.estado)}</td>
       <td>
         <div style="display:flex;gap:.4rem">
-          ${m.estado === 'Préstamo' ? `<button class="btn-cyber warning" style="padding:.22rem .55rem;font-size:.72rem" onclick="window.quickDev('${m.codigo}')" title="Devolver balón"><i class="bi bi-arrow-return-left"></i></button>` : ''}
+          ${m.estado === 'Préstamo' && isProfesor() ? `<button class="btn-cyber warning" style="padding:.22rem .55rem;font-size:.72rem" onclick="window.quickDev('${m.codigo}')" title="Devolver balón"><i class="bi bi-arrow-return-left"></i></button>` : ''}
           ${isProfesor() ? `<button class="btn-cyber danger" style="padding:.22rem .55rem;font-size:.72rem" onclick="window.delMov('${m.id}')" title="Eliminar registro"><i class="bi bi-trash"></i></button>` : ''}
         </div>
       </td>
@@ -58,6 +58,10 @@ export function renderMovs() {
 }
 
 export function quickDev(codigo) {
+  if (!isProfesor()) {
+    msg('Acción restringida: Por seguridad institucional, las devoluciones solo pueden ser recibidas y verificadas por un Profesor.', 'err');
+    return;
+  }
   const dCodInput = document.querySelector('#dCod');
   if (dCodInput) dCodInput.value = codigo;
   const modalEl = document.querySelector('#mDev');

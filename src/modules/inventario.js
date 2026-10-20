@@ -6,7 +6,7 @@ import { ApiService } from '../services/apiService.js';
 import { PAGINATION, ESTADOS } from '../config/constants.js';
 import { badge, matchQuery } from '../ui/uiHelpers.js';
 import { msg } from '../ui/toast.js';
-import { isProfesor } from './auth.js';
+import { isProfesor, isEstudiante } from './auth.js';
 
 let allInv = [];
 let invCurrentPage = 1;
@@ -47,10 +47,15 @@ export function renderInv(page = 1) {
   const est  = estEl?.value || '';
   const tipo = tipoEl?.value || '';
 
-  const filteredRows = allInv
+  let filteredRows = allInv
     .filter(b => !est || b.estado === est)
     .filter(b => !tipo || b.tipo === tipo)
     .filter(b => matchQuery(b.codigo, (b.tipo + (b.obs || '')), q));
+
+  // Para el perfil de Estudiante, los balones dañados no se muestran
+  if (isEstudiante()) {
+    filteredRows = filteredRows.filter(b => b.estado !== ESTADOS.DANADO);
+  }
 
   if (!filteredRows.length) {
     tb.innerHTML = `<tr><td colspan="7"><div class="empty-state"><i class="bi bi-database-slash"></i><p>Sin registros</p></div></td></tr>`;

@@ -78,18 +78,46 @@ export function applyRolePermissions() {
   if (btnNuevoBal) btnNuevoBal.style.display = isProf ? 'inline-flex' : 'none';
   if (sideNavNuevoBal) sideNavNuevoBal.style.display = isProf ? 'flex' : 'none';
 
-  // 2. Exportación de Respaldo SQL en el menú lateral: solo accesible para Profesores
+  // 2. Devoluciones: por seguridad institucional, solo el Profesor puede recibir y verificar material
+  const btnDevolver = document.getElementById('btnDevolver');
+  const sideNavDev  = document.getElementById('sideNavDev');
+  if (btnDevolver) btnDevolver.style.display = isProf ? 'inline-flex' : 'none';
+  if (sideNavDev)  sideNavDev.style.display  = isProf ? 'flex' : 'none';
+
+  // 3. Dañados: el estudiante no ve balones dañados ni reporta averías administrativas
+  const btnMarcarDanado = document.getElementById('btnMarcarDanado');
+  const sideNavDan      = document.getElementById('sideNavDan');
+  const cardKpiDanados  = document.getElementById('cardKpiDanados');
+  const optInvDanado    = document.getElementById('optInvDanado');
+  if (btnMarcarDanado) btnMarcarDanado.style.display = isProf ? 'inline-flex' : 'none';
+  if (sideNavDan)      sideNavDan.style.display      = isProf ? 'flex' : 'none';
+  if (cardKpiDanados)  cardKpiDanados.style.display  = isProf ? 'block' : 'none';
+  if (optInvDanado)    optInvDanado.style.display    = isProf ? 'block' : 'none';
+
+  // 4. Carga inicial del inventario enfocada en 'Disponibles' SOLO para Estudiante
+  const sInvEst = document.getElementById('sInvEst');
+  if (sInvEst) {
+    if (!isProf) {
+      sInvEst.value = 'Disponible';
+    } else {
+      sInvEst.value = '';
+    }
+  }
+
+  // 5. Exportación de Respaldo SQL en el menú lateral: solo accesible para Profesores
   const sideNavExportSql = document.getElementById('sideNavExportSql');
   if (sideNavExportSql) sideNavExportSql.style.display = isProf ? 'flex' : 'none';
 
-  // 3. Banner informativo de permisos para Estudiantes (Monitores)
+  // 6. Banner informativo de permisos para Estudiantes (Monitores)
   const roleNoticeEl = document.getElementById('roleNoticeBanner');
   if (roleNoticeEl) {
     if (!isProf) {
       roleNoticeEl.innerHTML = `
         <div class="alert-cyber info mb-3">
-          <i class="bi bi-info-circle-fill me-2"></i>
-          <strong>Modo Monitor (Estudiante):</strong> Tienes permisos para registrar <strong>Préstamos</strong>, <strong>Devoluciones</strong> y <strong>Reportar Daños</strong>. Las altas y bajas de inventario están reservadas a docentes.
+          <i class="bi bi-shield-check me-2 fs-5 text-info"></i>
+          <div>
+            <strong>Modo Monitor (Estudiante):</strong> Tu vista inicial está enfocada en balones <strong>Disponibles</strong> listos para clase. Por seguridad institucional y control de pérdidas, las <strong>Devoluciones</strong>, altas y bajas son responsabilidad exclusiva de los <strong>Profesores</strong>.
+          </div>
         </div>`;
       roleNoticeEl.classList.remove('d-none');
     } else {

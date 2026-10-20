@@ -89,9 +89,10 @@ El sistema cuenta con una pantalla inicial de acceso (Login y Registro) con perm
 | Funcionalidad / Permiso | Profesor / Docente | Estudiante / Monitor |
 | :--- | :---: | :---: |
 | **Iniciar Sesión y Registrarse** | ✅ Sí | ✅ Sí |
-| **Consultar Inventario y Movimientos** | ✅ Sí | ✅ Sí |
-| **Registrar Préstamos y Devoluciones** | ✅ Sí | ✅ Sí |
-| **Reportar Balón Dañado** | ✅ Sí | ✅ Sí |
+| **Carga Inicial del Inventario** | Vista Completa (Todos) | 🎯 Enfocada en **Disponibles** |
+| **Registrar Préstamos** | ✅ Sí | ✅ Sí |
+| **Registrar Devolución de Balones** | ✅ Sí | ❌ No (Exclusivo Profesor por Seguridad) |
+| **Visualizar / Gestionar Balones Dañados** | ✅ Sí | ❌ No (Ocultos para evitar ruido operativo) |
 | **Registrar Nuevos Balones en Inventario** | ✅ Sí | ❌ No (Exclusivo Docente) |
 | **Eliminar Balones Dañados (Baja definitiva)** | ✅ Sí | ❌ No (Exclusivo Docente) |
 | **Eliminar Registros del Historial** | ✅ Sí | ❌ No (Exclusivo Docente) |

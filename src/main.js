@@ -137,6 +137,10 @@ function setupEventListeners() {
   const btnDev = document.querySelector('#btnDev');
   if (btnDev) {
     btnDev.addEventListener('click', async () => {
+      if (!isProfesor()) {
+        msg('Acción restringida: Por seguridad institucional, las devoluciones solo pueden ser recibidas y verificadas por un Profesor.', 'err');
+        return;
+      }
       const dCod = document.querySelector('#dCod');
       const dObs = document.querySelector('#dObs');
 

@@ -145,7 +145,7 @@
       <div class="kpi-hint"><i class="bi bi-arrow-right-circle"></i> Ver en préstamo</div>
       <i class="bi bi-arrow-left-right kpi-icon-bg"></i>
     </a>
-    <a class="glass kpi-card accent-top" href="#" onclick="goTab('inventario');filterInv('Dañado');return false">
+    <a class="glass kpi-card accent-top" id="cardKpiDanados" href="#" onclick="goTab('inventario');filterInv('Dañado');return false">
       <div class="kpi-label">Dañados</div>
       <div class="kpi-value red" id="kpiDanados">0</div>
       <div class="kpi-sub"><i class="bi bi-exclamation-triangle"></i> Requieren atención</div>
@@ -168,9 +168,9 @@
       </button>
       <div class="action-pills">
         <button class="btn-cyber success" id="btnNuevoBal" data-bs-toggle="modal" data-bs-target="#mBal"><i class="bi bi-plus-circle"></i> Nuevo Balón</button>
-        <button class="btn-cyber primary" data-bs-toggle="modal" data-bs-target="#mPre"><i class="bi bi-arrow-right-circle"></i> Prestar</button>
-        <button class="btn-cyber warning" data-bs-toggle="modal" data-bs-target="#mDev"><i class="bi bi-arrow-return-left"></i> Devolver</button>
-        <button class="btn-cyber danger"  data-bs-toggle="modal" data-bs-target="#mDan"><i class="bi bi-exclamation-octagon"></i> Dañado</button>
+        <button class="btn-cyber primary" id="btnPrestar" data-bs-toggle="modal" data-bs-target="#mPre"><i class="bi bi-arrow-right-circle"></i> Prestar</button>
+        <button class="btn-cyber warning" id="btnDevolver" data-bs-toggle="modal" data-bs-target="#mDev"><i class="bi bi-arrow-return-left"></i> Devolver</button>
+        <button class="btn-cyber danger"  id="btnMarcarDanado" data-bs-toggle="modal" data-bs-target="#mDan"><i class="bi bi-exclamation-octagon"></i> Dañado</button>
       </div>
     </div>
 
@@ -234,7 +234,9 @@
         <div class="form-group"><label>Estado</label>
           <select id="sInvEst" class="cyber-select">
             <option value="">Todos</option>
-            <option>Disponible</option><option>Préstamo</option><option>Dañado</option>
+            <option value="Disponible">Disponible</option>
+            <option value="Préstamo">Préstamo</option>
+            <option value="Dañado" id="optInvDanado">Dañado</option>
           </select>
         </div>
       </div>
@@ -271,9 +273,9 @@
   </div>
   <div class="offcanvas-body d-flex flex-column gap-1">
     <button id="sideNavNuevoBal" class="side-nav-link" data-bs-toggle="modal" data-bs-target="#mBal" data-bs-dismiss="offcanvas"><i class="bi bi-plus-square-fill"></i>Registrar nuevo balón</button>
-    <button class="side-nav-link" data-bs-toggle="modal" data-bs-target="#mPre" data-bs-dismiss="offcanvas"><i class="bi bi-arrow-right-circle-fill"></i>Nuevo préstamo</button>
-    <button class="side-nav-link" data-bs-toggle="modal" data-bs-target="#mDev" data-bs-dismiss="offcanvas"><i class="bi bi-arrow-return-left"></i>Registrar devolución</button>
-    <button class="side-nav-link" data-bs-toggle="modal" data-bs-target="#mDan" data-bs-dismiss="offcanvas"><i class="bi bi-exclamation-octagon-fill"></i>Marcar balón dañado</button>
+    <button id="sideNavPre" class="side-nav-link" data-bs-toggle="modal" data-bs-target="#mPre" data-bs-dismiss="offcanvas"><i class="bi bi-arrow-right-circle-fill"></i>Nuevo préstamo</button>
+    <button id="sideNavDev" class="side-nav-link" data-bs-toggle="modal" data-bs-target="#mDev" data-bs-dismiss="offcanvas"><i class="bi bi-arrow-return-left"></i>Registrar devolución</button>
+    <button id="sideNavDan" class="side-nav-link" data-bs-toggle="modal" data-bs-target="#mDan" data-bs-dismiss="offcanvas"><i class="bi bi-exclamation-octagon-fill"></i>Marcar balón dañado</button>
     <hr style="border-color:var(--border)">
     <a class="side-nav-link" href="api.php?action=export_csv" target="_blank"><i class="bi bi-file-earmark-spreadsheet"></i>Exportar Movimientos (CSV)</a>
     <a class="side-nav-link" href="api.php?action=export_csv&tabla=inventario" target="_blank"><i class="bi bi-file-earmark-text"></i>Exportar Inventario (CSV)</a>
